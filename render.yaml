@@ -9,7 +9,7 @@ services:
   envVars:
   - key: NODE_ENV
     value: production
-Uncomment the following to deploy this app as a static site on render
+# Uncomment the following to deploy this app as a static site on render
 - type: web
   name: nextjs-static
   runtime: static
