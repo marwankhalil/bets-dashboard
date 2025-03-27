@@ -1,6 +1,6 @@
 // src/lib/api.js
 
-const BASE_URL = process.env.BETS_API_BACKEND_URL || 'http://127.0.0.1:5000'; // fallback to localhost if env var not set
+const BASE_URL = process.env.NEXT_PUBLIC_BETS_API_BACKEND_URL || 'http://127.0.0.1:5000'; // fallback to localhost if env var not set
 const USER_ID = '550e8400-e29b-41d4-a716-446655440000'; // temp hardcoded
 
 export async function fetchMatches() {
