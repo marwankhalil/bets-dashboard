@@ -1,12 +1,10 @@
-import Link from "next/link";
-
+import TopToolbar from '../components/toolbar';
+import MatchesPage from './matches';
 export default function Home() {
   return (
     <div>
-      Hello World.{" "}
-      <Link href="/about">
-        About
-      </Link>
+      <MatchesPage />
     </div>
   );
 }
+
