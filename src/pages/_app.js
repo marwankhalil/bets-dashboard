@@ -5,21 +5,67 @@ import Layout from '../components/Layout';
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
-    primary: { main: '#0072b1' }, // LinkedIn-style blue
-    secondary: { main: '#ff5722' }, // sporty orange
+    mode: 'dark',
+    primary: {
+      main: '#00bcd4', // cyan accent
+    },
     background: {
-      default: '#eaf2f8',
-      paper: '#ffffff'
+      default: '#141e30', // gradient base
+      paper: '#1e1e1e',   // card/paper base
     },
     text: {
-      primary: '#1e1e1e',
-      secondary: '#5f6368'
-    }
+      primary: '#ffffff',
+      secondary: '#cccccc',
+    },
   },
   typography: {
-    fontFamily: 'Segoe UI, Roboto, sans-serif'
-  }
+    fontFamily: `'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif`,
+    h5: {
+      fontWeight: 700,
+    },
+    button: {
+      textTransform: 'none',
+      fontWeight: 600,
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          color: '#000',
+          '&:disabled': {
+            opacity: 0.5,
+            color: '#000',
+          },
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          '& fieldset': {
+            borderColor: '#00bcd4',
+          },
+          '&:hover fieldset': {
+            borderColor: '#00acc1',
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: '#00bcd4',
+          },
+          input: {
+            color: '#ffffff',
+          },
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: '#cccccc',
+        },
+      },
+    },
+  },
 });
 
 
