@@ -25,7 +25,10 @@ export default function Username({ onSubmit }) {
         }
 
         try {
-            await onSubmit(username);
+            const response = await onSubmit(username);
+            if (response) {
+                setError(response);
+            }
         } catch (error) {
             setError('Failed to set username. Please try again.');
         } finally {

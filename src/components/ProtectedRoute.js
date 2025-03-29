@@ -10,6 +10,9 @@ export default function ProtectedRoute({ children }) {
   useEffect(() => {
     if (!loading && !user) {
       router.push('/');
+    } else if (!loading && user && !user.username) {
+      console.log("PUSHING TO NEW USER FROM PROTECTED ROUTE");
+      router.push('/new-user');
     }
   }, [user, loading, router]);
 

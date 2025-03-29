@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from '../lib/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { createContext, use, useContext, useEffect, useState } from 'react';
+import { auth, provider } from '../lib/firebase';
+import { onAuthStateChanged, signInWithPopup } from 'firebase/auth';
 import { login } from '../lib/api';
 
 const AuthContext = createContext({});
@@ -8,6 +8,34 @@ const AuthContext = createContext({});
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    console.log("AUTH", user);
+  }, [user])
+  const handleGoogleLogin = async () => {
+    try {
+      // Sign in with Google
+      const result = await signInWithPopup(auth, provider);
+      const firebaseUser = result.user;
+      
+      // Get the ID token
+      const token = await firebaseUser.getIdToken();
+      
+      // Call backend API to create/update user
+      const loginResponse = await login({
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName,
+        idToken: token
+      });
+      
+      setUser(loginResponse);
+      return loginResponse;
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    }
+  };
 
   const refreshUser = async () => {
     const firebaseUser = auth.currentUser;
@@ -31,17 +59,13 @@ export function AuthProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         try {
-          // Get the ID token
           const token = await firebaseUser.getIdToken();
-          
-          // Fetch user data from backend
           const loginResponse = await login({
             uid: firebaseUser.uid,
             email: firebaseUser.email,
             displayName: firebaseUser.displayName,
             idToken: token
           });
-          
           setUser(loginResponse);
         } catch (error) {
           console.error('Failed to fetch user data:', error);
@@ -57,7 +81,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, refreshUser }}>
+    <AuthContext.Provider value={{ user, loading, refreshUser, handleGoogleLogin }}>
       {!loading && children}
     </AuthContext.Provider>
   );

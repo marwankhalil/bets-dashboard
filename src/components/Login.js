@@ -1,25 +1,21 @@
 import React, { useState } from 'react';
 import { Button, Box, Typography, Paper, Stack, Alert } from '@mui/material';
 import { Google as GoogleIcon } from '@mui/icons-material';
-import { getAuth, signInWithPopup } from 'firebase/auth';
-import { auth, provider } from '../lib/firebase';
-import { login, setUsername } from '../lib/api';
 import { useRouter } from 'next/router';
 import { useAuth } from '../context/AuthContext';
-import Username from './Username';
 
 export default function Login() {
     const router = useRouter();
-    const { user } = useAuth();
+    const { user, handleGoogleLogin } = useAuth();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [showUsername, setShowUsername] = useState(false);
-    const [userData, setUserData] = useState(null);
-    const [loginResponse, setLoginResponse] = useState(null);
 
     // If user is already logged in and has a username, redirect to matches
-    if (user && user.username && !showUsername) {
+    if (user && user.username) {
         router.push('/matches');
+        return null;
+    } else if (user && !user.username) {
+        router.push('/new-user');
         return null;
     }
 
@@ -28,25 +24,10 @@ export default function Login() {
             setLoading(true);
             setError(null);
             
-            // Sign in with Google
-            const result = await signInWithPopup(auth, provider);
-            const user = result.user;            
-            // Get the ID token
-            const token = await user.getIdToken();
+            const loginResponse = await handleGoogleLogin();
             
-            // Call your backend API to create/update user
-            const loginResponse = await login({
-                uid: user.uid,
-                email: user.email,
-                displayName: user.displayName,
-                idToken: token
-            });
-
-            setLoginResponse(loginResponse);
-
             if (!loginResponse.username) {
-                setShowUsername(true);
-                setUserData(loginResponse);
+                router.push('/new-user');
             } else {
                 router.push('/matches');
             }
@@ -57,20 +38,6 @@ export default function Login() {
             setLoading(false);
         }
     };
-
-    const handleUsernameSet = async (username) => {
-        try {
-            await setUsername(loginResponse.user_id, username);
-            router.push('/matches');
-        } catch (error) {
-            console.error('Failed to set username:', error);
-            setError('Failed to set username. Please try again.');
-        }
-    };
-
-    if (showUsername) {
-        return <Username onSubmit={handleUsernameSet} />;
-    }
 
     return (
         <Box
