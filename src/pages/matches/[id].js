@@ -12,8 +12,7 @@ import {
   Stack
 } from '@mui/material';
 import { fetchMatchById, placeBet } from '../../lib/api';
-
-const USER_ID = '550e8400-e29b-41d4-a716-446655440000';
+import { useAuth } from '../../context/AuthContext';
 
 const statusColor = (status) => {
   switch (status) {
@@ -27,6 +26,7 @@ const statusColor = (status) => {
 export default function MatchBetPage() {
   const router = useRouter();
   const { id } = router.query;
+  const { user, refreshUser } = useAuth();
 
   const [match, setMatch] = useState(null);
   const [betAmount, setBetAmount] = useState('');
@@ -75,7 +75,7 @@ export default function MatchBetPage() {
 
     try {
       const response = await placeBet({
-        user_id: USER_ID,
+        user_id: user.user_id,
         match_id: id,
         bet_type: betType,
         bet_amount: Number(betAmount),
@@ -86,6 +86,7 @@ export default function MatchBetPage() {
         setMessage({ type: 'success', text: '✅ Bet placed successfully!' });
         setBetAmount('');
         setBetType(null);
+        await refreshUser();
         router.push('/my-bets');
       } else {
         throw new Error('Unexpected response from server.');

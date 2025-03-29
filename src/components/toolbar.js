@@ -14,9 +14,13 @@ import {
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useAuth } from '../context/AuthContext';
+import { auth } from '../lib/firebase';
+import { signOut } from 'firebase/auth';
 
 export default function TopToolbar() {
   const router = useRouter();
+  const { user } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -26,6 +30,16 @@ export default function TopToolbar() {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push('/');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+    handleMenuClose();
   };
 
   const navLink = (href, label) => (
@@ -77,41 +91,70 @@ export default function TopToolbar() {
           </Link>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            {navLink('/matches', 'MATCHES')}
-            {navLink('/my-bets', 'MY BETS')}
+            {user && (
+              <>
+                {navLink('/matches', 'MATCHES')}
+                {navLink('/my-bets', 'MY BETS')}
+              </>
+            )}
 
-            {/* Avatar & Menu */}
-            <IconButton onClick={handleAvatarClick} sx={{ p: 0 }}>
-              <Avatar
-                alt="User"
+            {user ? (
+              <>
+                <Box sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1,
+                  bgcolor: 'rgba(255, 255, 255, 0.1)',
+                  px: 2,
+                  py: 0.5,
+                  borderRadius: 2,
+                  mr: 1
+                }}>
+                  <Typography variant="body2" sx={{ color: '#00bcd4', fontWeight: 600 }}>
+                    Balance:
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: '#ffffff', fontWeight: 600 }}>
+                    ${Number(user.balance || 0).toFixed(2)}
+                  </Typography>
+                </Box>
+                <IconButton onClick={handleAvatarClick} sx={{ p: 0 }}>
+                  <Avatar
+                    alt={user.displayName || 'User'}
+                    src={user.photoURL}
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      bgcolor: '#00bcd4',
+                      color: '#000',
+                      fontWeight: 600
+                    }}
+                  >
+                    {user.displayName ? user.displayName[0].toUpperCase() : 'U'}
+                  </Avatar>
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <Button
+                color="inherit"
+                onClick={() => router.push('/')}
                 sx={{
-                  width: 32,
-                  height: 32,
-                  bgcolor: '#00bcd4',
-                  color: '#000',
-                  fontWeight: 600
+                  color: '#ffffff',
+                  textTransform: 'none',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  },
                 }}
               >
-                U
-              </Avatar>
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleMenuClose}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-              sx={{
-                '& .MuiPaper-root': {
-                  bgcolor: '#1e1e1e',
-                  color: '#fff'
-                }
-              }}
-            >
-              <MenuItem onClick={handleMenuClose}>My Profile</MenuItem>
-              <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
-              <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
-            </Menu>
+                Login
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>

@@ -27,7 +27,25 @@ export async function placeBet(betData) {
   return await res.json();
 }
 
-export async function fetchUserBets() {
-  const res = await fetch(`${BASE_URL}/bets/${USER_ID}`);
+export async function fetchUserBets(user_id) {
+  const res = await fetch(`${BASE_URL}/bets/${user_id}`);
+  return await res.json();
+}
+
+export async function login(user) {
+  const res = await fetch(`${BASE_URL}/api/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ firebase_uid: user.uid, email: user.email, id_token: user.idToken, display_name: user.displayName }),
+  });
+  return await res.json();
+}
+
+export async function setUsername(user_id, username) {
+  const res = await fetch(`${BASE_URL}/api/set_username`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: user_id, username: username }),
+  });
   return await res.json();
 }

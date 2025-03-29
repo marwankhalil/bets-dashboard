@@ -2,6 +2,7 @@ import TopToolbar from '../components/toolbar';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import '../styles/globals.css';
 import Layout from '../components/Layout';
+import { AuthProvider } from '../context/AuthContext';
 
 const theme = createTheme({
   palette: {
@@ -68,14 +69,17 @@ const theme = createTheme({
   },
 });
 
-
-export default function App({ Component, pageProps }) {
+function MyApp({ Component, pageProps }) {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
+
+export default MyApp;
