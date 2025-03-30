@@ -24,7 +24,11 @@ export default function MatchesPage() {
     async function loadMatches() {
       try {
         const data = await fetchUpcomingMatches();
-        setMatches(data.matches || []);
+        // Sort matches by match_date in ascending order
+        const sortedMatches = (data.matches || []).sort((a, b) => 
+          new Date(a.match_date) - new Date(b.match_date)
+        );
+        setMatches(sortedMatches);
       } catch (error) {
         console.error('Error loading matches:', error);
       } finally {

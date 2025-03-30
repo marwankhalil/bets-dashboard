@@ -40,10 +40,14 @@ export default function MyBetsPage() {
     loadBets();
   }, []);
 
-  const sortByDate = (list) => list.sort((a, b) => new Date(a.match_date) - new Date(b.match_date));
+  const sortByDate = (list, ascending = true) => 
+    list.sort((a, b) => ascending 
+      ? new Date(a.match_date) - new Date(b.match_date)
+      : new Date(b.match_date) - new Date(a.match_date)
+    );
 
-  const upcomingBets = sortByDate(bets.filter(bet => bet.result === 'pending'));
-  const pastBets = sortByDate(bets.filter(bet => bet.result !== 'pending'));
+  const upcomingBets = sortByDate(bets.filter(bet => bet.result === 'pending'), true);
+  const pastBets = sortByDate(bets.filter(bet => bet.result !== 'pending'), false);
 
   const BetItem = ({ bet }) => (
     <Box
