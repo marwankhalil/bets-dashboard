@@ -73,6 +73,11 @@ export default function MatchBetPage() {
       return;
     }
 
+    if (Number(betAmount) > user.balance) {
+      setMessage({ type: 'error', text: 'You do not have enough balance to place this bet.' });
+      return;
+    }
+
     try {
       const response = await placeBet({
         user_id: user.user_id,
