@@ -54,7 +54,6 @@ export default function MatchBetPage() {
         router.push('/404');
       }
     }
-
     if (id) {
       loadMatch();
     }
