@@ -11,19 +11,24 @@ import {
   Paper,
   Divider
 } from '@mui/material';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { fetchUpcomingMatches } from '../lib/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import { useAuth } from '../context/AuthContext';
 
 
 export default function MatchesPage() {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     async function loadMatches() {
       try {
-        const data = await fetchUpcomingMatches();
+        if (!user || !user.user_id) return;
+        
+        const data = await fetchUpcomingMatches(user.user_id);
         // Sort matches by match_date in ascending order
         const sortedMatches = (data.matches || []).sort((a, b) => 
           new Date(a.match_date) - new Date(b.match_date)
@@ -36,7 +41,13 @@ export default function MatchesPage() {
       }
     }
     loadMatches();
-  }, []);
+  }, [user]);
+
+  const handleBetClick = (matchId, hasBet) => {
+    if (!hasBet) {
+      router.push(`/matches/${matchId}`);
+    }
+  };
 
   return (
     <ProtectedRoute>
@@ -193,25 +204,25 @@ export default function MatchesPage() {
                       </Typography>
 
                       {/* Bet Button */}
-                      <Link href={`/matches/${match.match_id}`} passHref>
-                        <Button 
-                          variant="contained" 
-                          fullWidth
-                          sx={{
-                            py: 1.5,
-                            borderRadius: 2,
-                            textTransform: 'none',
-                            fontWeight: 600,
-                            fontSize: '1rem',
-                            bgcolor: 'primary.main',
-                            '&:hover': {
-                              bgcolor: 'primary.dark'
-                            }
-                          }}
-                        >
-                          Place Bet
-                        </Button>
-                      </Link>
+                      <Button 
+                        variant="contained" 
+                        fullWidth
+                        disabled={match.user_bet !== null}
+                        onClick={() => handleBetClick(match.match_id, match.user_bet !== null)}
+                        sx={{
+                          py: 1.5,
+                          borderRadius: 2,
+                          textTransform: 'none',
+                          fontWeight: 600,
+                          fontSize: '1rem',
+                          bgcolor: match.user_bet !== null ? 'grey.400' : 'primary.main',
+                          '&:hover': {
+                            bgcolor: match.user_bet !== null ? 'grey.400' : 'primary.dark'
+                          }
+                        }}
+                      >
+                        {match.user_bet !== null ? "Bet Placed" : "Place Bet"}
+                      </Button>
                     </CardContent>
                   </Card>
                 </Grid>

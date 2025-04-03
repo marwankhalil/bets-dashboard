@@ -8,10 +8,10 @@ export async function fetchMatches() {
   return await res.json();
 }
 
-export async function fetchUpcomingMatches() {
-    const res = await fetch(`${BASE_URL}/upcoming_matches`);
+export async function fetchUpcomingMatches(user_id) {
+    const res = await fetch(`${BASE_URL}/upcoming_matches?user_id=${user_id}`);
     return await res.json();
-  }
+}
 
 export async function fetchMatchById(id) {
   const res = await fetch(`${BASE_URL}/matches/${id}`);
