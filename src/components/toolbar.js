@@ -238,17 +238,15 @@ export default function TopToolbar() {
                   </Box>
                   <IconButton onClick={handleAvatarClick} sx={{ p: 0 }}>
                     <Avatar
-                      alt={user.displayName || 'User'}
+                      alt={user.username || 'User'}
                       src={user.photoURL}
-                      sx={{
+                      sx={{ 
+                        bgcolor: 'primary.main',
                         width: 32,
-                        height: 32,
-                        bgcolor: '#00bcd4',
-                        color: '#000',
-                        fontWeight: 600
+                        height: 32
                       }}
                     >
-                      {user.displayName ? user.displayName[0].toUpperCase() : 'U'}
+                      {user.username ? user.username[0].toUpperCase() : 'U'}
                     </Avatar>
                   </IconButton>
                   <Menu
