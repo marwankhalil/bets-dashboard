@@ -16,6 +16,24 @@ import { fetchUpcomingMatches } from '../lib/api';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { useAuth } from '../context/AuthContext';
 
+const groupMatchesByDay = (matches) => {
+  const groups = {};
+  matches.forEach(match => {
+    const date = new Date(match.match_date);
+    const dayKey = date.toLocaleDateString('en-US', { 
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    
+    if (!groups[dayKey]) {
+      groups[dayKey] = [];
+    }
+    groups[dayKey].push(match);
+  });
+  return groups;
+};
 
 export default function MatchesPage() {
   const [matches, setMatches] = useState([]);
@@ -48,6 +66,8 @@ export default function MatchesPage() {
       router.push(`/matches/${matchId}`);
     }
   };
+
+  const matchGroups = groupMatchesByDay(matches);
 
   return (
     <ProtectedRoute>
@@ -91,143 +111,163 @@ export default function MatchesPage() {
               </Typography>
             </Paper>
           ) : (
-            <Grid container spacing={3}>
-              {matches.map((match) => (
-                <Grid item xs={12} sm={6} md={4} key={match.match_id}>
-                  <Card
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {Object.entries(matchGroups).map(([day, dayMatches]) => (
+                <Box key={day}>
+                  <Typography
+                    variant="h6"
                     sx={{
-                      height: '100%',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      borderRadius: 3,
-                      bgcolor: 'background.paper',
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-                      transition: 'all 0.3s ease-in-out',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)',
-                        borderColor: 'primary.main'
-                      }
+                      color: 'primary.main',
+                      fontWeight: 600,
+                      mb: 2,
+                      pb: 1,
+                      borderBottom: '2px solid',
+                      borderColor: 'divider'
                     }}
                   >
-                    {/* Status Banner */}
-                    <Box
-                      className="match-status"
-                      sx={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bgcolor: 'secondary.main',
-                        color: 'white',
-                        py: 1,
-                        px: 2,
-                        transform: 'translateY(-100%)',
-                        opacity: 0,
-                        transition: 'all 0.3s ease-in-out',
-                        zIndex: 1
-                      }}
-                    >
-                      <Typography variant="caption" sx={{ fontWeight: 600 }}>
-                        {match.match_status.toUpperCase()}
-                      </Typography>
-                    </Box>
-
-                    {/* Main Content */}
-                    <CardContent sx={{ 
-                      p: 3,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      flex: 1
-                    }}>
-                      {/* Teams */}
-                      <Box sx={{ mb: 3 }}>
-                        <Typography 
-                          variant="h6" 
-                          component="h2" 
-                          sx={{ 
-                            fontWeight: 700,
-                            color: 'text.primary',
-                            mb: 1
+                    {day}
+                  </Typography>
+                  <Grid container spacing={3}>
+                    {dayMatches.map((match) => (
+                      <Grid item xs={12} sm={6} md={4} key={match.match_id}>
+                        <Card
+                          sx={{
+                            height: '100%',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            borderRadius: 3,
+                            bgcolor: 'background.paper',
+                            border: '1px solid',
+                            borderColor: 'divider',
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                            transition: 'all 0.3s ease-in-out',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            '&:hover': {
+                              transform: 'translateY(-4px)',
+                              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)',
+                              borderColor: 'primary.main'
+                            }
                           }}
                         >
-                          {match.team_1}
-                        </Typography>
-                        <Typography 
-                          variant="h6" 
-                          component="h2" 
-                          sx={{ 
-                            fontWeight: 700,
-                            color: 'secondary.main',
-                            mb: 2
-                          }}
-                        >
-                          vs
-                        </Typography>
-                        <Typography 
-                          variant="h6" 
-                          component="h2" 
-                          sx={{ 
-                            fontWeight: 700,
-                            color: 'text.primary'
-                          }}
-                        >
-                          {match.team_2}
-                        </Typography>
-                      </Box>
+                          {/* Status Banner */}
+                          <Box
+                            className="match-status"
+                            sx={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              bgcolor: 'secondary.main',
+                              color: 'white',
+                              py: 1,
+                              px: 2,
+                              transform: 'translateY(-100%)',
+                              opacity: 0,
+                              transition: 'all 0.3s ease-in-out',
+                              zIndex: 1
+                            }}
+                          >
+                            <Typography variant="caption" sx={{ fontWeight: 600 }}>
+                              {match.match_status.toUpperCase()}
+                            </Typography>
+                          </Box>
 
-                      {/* Spacer to push date and button to bottom */}
-                      <Box sx={{ flex: 1 }} />
+                          {/* Main Content */}
+                          <CardContent sx={{ 
+                            p: 3,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            flex: 1
+                          }}>
+                            {/* Teams */}
+                            <Box sx={{ mb: 3 }}>
+                              <Typography 
+                                variant="h6" 
+                                component="h2" 
+                                sx={{ 
+                                  fontWeight: 700,
+                                  color: 'text.primary',
+                                  mb: 1
+                                }}
+                              >
+                                {match.team_1}
+                              </Typography>
+                              <Typography 
+                                variant="h6" 
+                                component="h2" 
+                                sx={{ 
+                                  fontWeight: 700,
+                                  color: 'secondary.main',
+                                  mb: 2
+                                }}
+                              >
+                                vs
+                              </Typography>
+                              <Typography 
+                                variant="h6" 
+                                component="h2" 
+                                sx={{ 
+                                  fontWeight: 700,
+                                  color: 'text.primary'
+                                }}
+                              >
+                                {match.team_2}
+                              </Typography>
+                            </Box>
 
-                      {/* Date */}
-                      <Typography 
-                        variant="body2" 
-                        color="text.secondary"
-                        sx={{ 
-                          mb: 2,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 1
-                        }}
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                          <line x1="16" y1="2" x2="16" y2="6"></line>
-                          <line x1="8" y1="2" x2="8" y2="6"></line>
-                          <line x1="3" y1="10" x2="21" y2="10"></line>
-                        </svg>
-                        {new Date(match.match_date).toLocaleString()}
-                      </Typography>
+                            {/* Spacer to push date and button to bottom */}
+                            <Box sx={{ flex: 1 }} />
 
-                      {/* Bet Button */}
-                      <Button 
-                        variant="contained" 
-                        fullWidth
-                        disabled={match.user_bet !== null}
-                        onClick={() => handleBetClick(match.match_id, match.user_bet !== null)}
-                        sx={{
-                          py: 1.5,
-                          borderRadius: 2,
-                          textTransform: 'none',
-                          fontWeight: 600,
-                          fontSize: '1rem',
-                          bgcolor: match.user_bet !== null ? 'grey.400' : 'primary.main',
-                          '&:hover': {
-                            bgcolor: match.user_bet !== null ? 'grey.400' : 'primary.dark'
-                          }
-                        }}
-                      >
-                        {match.user_bet !== null ? "Bet Placed" : "Place Bet"}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Grid>
+                            {/* Time */}
+                            <Typography 
+                              variant="body2" 
+                              color="text.secondary"
+                              sx={{ 
+                                mb: 2,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1
+                              }}
+                            >
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                              </svg>
+                              {new Date(match.match_date).toLocaleTimeString('en-US', {
+                                hour: 'numeric',
+                                minute: '2-digit'
+                              })}
+                            </Typography>
+
+                            {/* Bet Button */}
+                            <Button 
+                              variant="contained" 
+                              fullWidth
+                              disabled={match.user_bet !== null}
+                              onClick={() => handleBetClick(match.match_id, match.user_bet !== null)}
+                              sx={{
+                                py: 1.5,
+                                borderRadius: 2,
+                                textTransform: 'none',
+                                fontWeight: 600,
+                                fontSize: '1rem',
+                                bgcolor: match.user_bet !== null ? 'grey.400' : 'primary.main',
+                                '&:hover': {
+                                  bgcolor: match.user_bet !== null ? 'grey.400' : 'primary.dark'
+                                }
+                              }}
+                            >
+                              {match.user_bet !== null ? "Bet Placed" : "Place Bet"}
+                            </Button>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Box>
               ))}
-            </Grid>
+            </Box>
           )}
         </Box>
       </Container>
