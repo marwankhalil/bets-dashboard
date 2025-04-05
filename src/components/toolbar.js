@@ -98,6 +98,9 @@ export default function TopToolbar() {
           <MenuItem sx={{ p: 0 }}>
             {navLink('/my-bets', 'MY BETS')}
           </MenuItem>
+          <MenuItem sx={{ p: 0 }}>
+            {navLink('/leaderboard', 'LEADERBOARD')}
+          </MenuItem>
         </>
       )}
       {!user && (
@@ -210,6 +213,7 @@ export default function TopToolbar() {
                 <>
                   {navLink('/matches', 'MATCHES')}
                   {navLink('/my-bets', 'MY BETS')}
+                  {navLink('/leaderboard', 'LEADERBOARD')}
                 </>
               )}
 

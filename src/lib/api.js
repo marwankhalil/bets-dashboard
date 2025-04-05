@@ -49,3 +49,8 @@ export async function setUsername(user_id, username) {
   });
   return await res.json();
 }
+
+export async function fetchLeaderboard() {
+  const res = await fetch(`${BASE_URL}/users/leaderboard`);
+  return await res.json();
+}
