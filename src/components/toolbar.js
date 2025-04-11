@@ -59,16 +59,30 @@ export default function TopToolbar() {
       <Button
         sx={{
           color: '#ffffff',
-          fontWeight: router.pathname === href ? 'bold' : 500,
+          fontWeight: router.pathname === href ? 700 : 500,
           textTransform: 'none',
-          borderBottom: router.pathname === href ? '2px solid #00bcd4' : 'none',
-          borderRadius: 0,
-          '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          fontSize: '0.95rem',
+          letterSpacing: '0.5px',
+          position: 'relative',
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            bottom: 0,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: router.pathname === href ? '100%' : '0%',
+            height: '2px',
+            background: 'linear-gradient(45deg, #4ecca3, #6c63ff)',
+            transition: 'width 0.3s ease',
           },
-          width: isMobile ? '100%' : 'auto',
-          justifyContent: isMobile ? 'flex-start' : 'center',
-          px: isMobile ? 2 : 1,
+          '&:hover::after': {
+            width: '100%',
+          },
+          '&:hover': {
+            color: '#4ecca3',
+            transform: 'translateY(-1px)',
+          },
+          transition: 'all 0.3s ease',
         }}
       >
         {label}
@@ -85,27 +99,99 @@ export default function TopToolbar() {
         sx: {
           mt: 1.5,
           minWidth: 200,
-          bgcolor: '#1e1e1e',
-          border: '1px solid #2e2e2e',
+          bgcolor: 'rgba(26, 26, 46, 0.95)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          borderRadius: 2,
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+          '& .MuiMenuItem-root': {
+            py: 1.5,
+            px: 2,
+            '&:hover': {
+              bgcolor: 'rgba(78, 204, 163, 0.1)',
+            }
+          }
         }
       }}
     >
       {user && (
         <>
           <MenuItem sx={{ p: 0 }} onClick={handleMenuClose}>
-            {navLink('/matches', 'MATCHES')}
+            <Link href="/matches" passHref>
+              <Button
+                fullWidth
+                sx={{
+                  color: '#ffffff',
+                  fontWeight: router.pathname === '/matches' ? 700 : 500,
+                  textTransform: 'none',
+                  fontSize: '0.95rem',
+                  letterSpacing: '0.5px',
+                  justifyContent: 'flex-start',
+                  px: 2,
+                  py: 1.5,
+                  '&:hover': {
+                    color: '#4ecca3',
+                    bgcolor: 'rgba(78, 204, 163, 0.1)',
+                  }
+                }}
+              >
+                MATCHES
+              </Button>
+            </Link>
           </MenuItem>
           <MenuItem sx={{ p: 0 }} onClick={handleMenuClose}>
-            {navLink(`/user/${user.user_id}`, 'MY PROFILE')}
+            <Link href={`/user/${user.user_id}`} passHref>
+              <Button
+                fullWidth
+                sx={{
+                  color: '#ffffff',
+                  fontWeight: router.pathname === `/user/${user.user_id}` ? 700 : 500,
+                  textTransform: 'none',
+                  fontSize: '0.95rem',
+                  letterSpacing: '0.5px',
+                  justifyContent: 'flex-start',
+                  px: 2,
+                  py: 1.5,
+                  '&:hover': {
+                    color: '#4ecca3',
+                    bgcolor: 'rgba(78, 204, 163, 0.1)',
+                  }
+                }}
+              >
+                MY PROFILE
+              </Button>
+            </Link>
           </MenuItem>
           <MenuItem sx={{ p: 0 }} onClick={handleMenuClose}>
-            {navLink('/leaderboard', 'LEADERBOARD')}
+            <Link href="/leaderboard" passHref>
+              <Button
+                fullWidth
+                sx={{
+                  color: '#ffffff',
+                  fontWeight: router.pathname === '/leaderboard' ? 700 : 500,
+                  textTransform: 'none',
+                  fontSize: '0.95rem',
+                  letterSpacing: '0.5px',
+                  justifyContent: 'flex-start',
+                  px: 2,
+                  py: 1.5,
+                  '&:hover': {
+                    color: '#4ecca3',
+                    bgcolor: 'rgba(78, 204, 163, 0.1)',
+                  }
+                }}
+              >
+                LEADERBOARD
+              </Button>
+            </Link>
           </MenuItem>
         </>
       )}
       {!user && (
         <MenuItem sx={{ p: 0 }} onClick={handleMenuClose}>
           <Button
+            fullWidth
             color="inherit"
             onClick={() => {
               router.push('/');
@@ -114,12 +200,15 @@ export default function TopToolbar() {
             sx={{
               color: '#ffffff',
               textTransform: 'none',
-              width: '100%',
+              fontSize: '0.95rem',
+              letterSpacing: '0.5px',
               justifyContent: 'flex-start',
               px: 2,
+              py: 1.5,
               '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              },
+                color: '#4ecca3',
+                bgcolor: 'rgba(78, 204, 163, 0.1)',
+              }
             }}
           >
             Login
@@ -132,30 +221,44 @@ export default function TopToolbar() {
   return (
     <AppBar
       position="sticky"
-      elevation={2}
+      elevation={0}
       sx={{
-        background: 'linear-gradient(to right, #141e30, #243b55)',
-        borderBottom: '1px solid #2e2e2e'
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)'
       }}
     >
       <Container maxWidth="lg">
-        <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
+        <Toolbar disableGutters sx={{ justifyContent: 'space-between', py: 1 }}>
           <Link href="/matches" legacyBehavior>
             <a style={{ textDecoration: 'none', color: '#ffffff' }}>
               <Box
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 1,
-                  cursor: 'pointer'
+                  gap: 1.5,
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s',
+                  '&:hover': {
+                    transform: 'scale(1.02)'
+                  }
                 }}
               >
-                <SportsSoccerIcon sx={{ color: '#00bcd4' }} />
+                <SportsSoccerIcon sx={{ 
+                  color: '#4ecca3',
+                  fontSize: '2rem',
+                  filter: 'drop-shadow(0 0 5px rgba(78, 204, 163, 0.5))'
+                }} />
                 <Typography 
                   variant="h6" 
                   fontWeight={700}
                   sx={{ 
-                    fontSize: { xs: '1.1rem', sm: '1.25rem' }
+                    fontSize: { xs: '1.2rem', sm: '1.5rem' },
+                    background: 'linear-gradient(45deg, #4ecca3, #6c63ff)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    letterSpacing: '0.5px'
                   }}
                 >
                   BetZone
@@ -165,24 +268,26 @@ export default function TopToolbar() {
           </Link>
 
           {isMobile ? (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               {user && (
                 <Box sx={{ 
                   display: 'flex', 
                   alignItems: 'center', 
                   gap: 1,
-                  bgcolor: 'rgba(255, 255, 255, 0.1)',
-                  px: 1.5,
-                  py: 0.5,
-                  borderRadius: 2,
-                  mr: 1
+                  bgcolor: 'rgba(78, 204, 163, 0.1)',
+                  px: 2,
+                  py: 0.75,
+                  borderRadius: 3,
+                  border: '1px solid rgba(78, 204, 163, 0.2)',
+                  backdropFilter: 'blur(5px)',
+                  WebkitBackdropFilter: 'blur(5px)'
                 }}>
                   <Typography 
                     variant="body2" 
                     sx={{ 
-                      color: '#00bcd4', 
+                      color: '#4ecca3', 
                       fontWeight: 600,
-                      fontSize: '0.75rem'
+                      fontSize: '0.8rem'
                     }}
                   >
                     Balance:
@@ -191,8 +296,8 @@ export default function TopToolbar() {
                     variant="body2" 
                     sx={{ 
                       color: '#ffffff', 
-                      fontWeight: 600,
-                      fontSize: '0.75rem'
+                      fontWeight: 700,
+                      fontSize: '0.9rem'
                     }}
                   >
                     ${Number(user.balance || 0).toFixed(2)}
@@ -201,14 +306,20 @@ export default function TopToolbar() {
               )}
               <IconButton
                 onClick={handleMobileMenuClick}
-                sx={{ color: '#ffffff' }}
+                sx={{ 
+                  color: '#ffffff',
+                  bgcolor: 'rgba(255, 255, 255, 0.1)',
+                  '&:hover': {
+                    bgcolor: 'rgba(255, 255, 255, 0.2)'
+                  }
+                }}
               >
                 <MenuIcon />
               </IconButton>
               {renderMobileMenu()}
             </Box>
           ) : (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
               {user && (
                 <>
                   {navLink('/matches', 'MATCHES')}
@@ -222,28 +333,45 @@ export default function TopToolbar() {
                   <Box sx={{ 
                     display: 'flex', 
                     alignItems: 'center', 
-                    gap: 1,
-                    bgcolor: 'rgba(255, 255, 255, 0.1)',
-                    px: 2,
-                    py: 0.5,
-                    borderRadius: 2,
-                    mr: 1
+                    gap: 1.5,
+                    bgcolor: 'rgba(78, 204, 163, 0.1)',
+                    px: 2.5,
+                    py: 1,
+                    borderRadius: 3,
+                    border: '1px solid rgba(78, 204, 163, 0.2)',
+                    backdropFilter: 'blur(5px)',
+                    WebkitBackdropFilter: 'blur(5px)',
+                    transition: 'all 0.3s',
+                    '&:hover': {
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 5px 15px rgba(78, 204, 163, 0.2)'
+                    }
                   }}>
-                    <Typography variant="body2" sx={{ color: '#00bcd4', fontWeight: 600 }}>
+                    <Typography variant="body2" sx={{ color: '#4ecca3', fontWeight: 600 }}>
                       Balance:
                     </Typography>
-                    <Typography variant="body2" sx={{ color: '#ffffff', fontWeight: 600 }}>
+                    <Typography variant="body2" sx={{ color: '#ffffff', fontWeight: 700 }}>
                       ${Number(user.balance || 0).toFixed(2)}
                     </Typography>
                   </Box>
-                  <IconButton onClick={handleAvatarClick} sx={{ p: 0 }}>
+                  <IconButton 
+                    onClick={handleAvatarClick} 
+                    sx={{ 
+                      p: 0,
+                      transition: 'all 0.3s',
+                      '&:hover': {
+                        transform: 'scale(1.1)'
+                      }
+                    }}
+                  >
                     <Avatar
                       alt={user.username || 'User'}
                       src={user.photoURL}
                       sx={{ 
-                        bgcolor: 'primary.main',
-                        width: 32,
-                        height: 32
+                        bgcolor: '#4ecca3',
+                        width: 40,
+                        height: 40,
+                        border: '2px solid #6c63ff'
                       }}
                     >
                       {user.username ? user.username[0].toUpperCase() : 'U'}
@@ -253,8 +381,29 @@ export default function TopToolbar() {
                     anchorEl={anchorEl}
                     open={open}
                     onClose={handleMenuClose}
+                    PaperProps={{
+                      sx: {
+                        mt: 2,
+                        bgcolor: 'rgba(26, 26, 46, 0.9)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: 2,
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)'
+                      }
+                    }}
                   >
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    <MenuItem 
+                      onClick={handleLogout}
+                      sx={{
+                        color: '#ffffff',
+                        '&:hover': {
+                          bgcolor: 'rgba(78, 204, 163, 0.2)'
+                        }
+                      }}
+                    >
+                      Logout
+                    </MenuItem>
                   </Menu>
                 </>
               ) : (
@@ -264,9 +413,17 @@ export default function TopToolbar() {
                   sx={{
                     color: '#ffffff',
                     textTransform: 'none',
+                    bgcolor: 'rgba(78, 204, 163, 0.1)',
+                    px: 3,
+                    py: 1,
+                    borderRadius: 3,
+                    border: '1px solid rgba(78, 204, 163, 0.2)',
+                    transition: 'all 0.3s',
                     '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    },
+                      bgcolor: 'rgba(78, 204, 163, 0.2)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 5px 15px rgba(78, 204, 163, 0.2)'
+                    }
                   }}
                 >
                   Login

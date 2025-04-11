@@ -12,7 +12,8 @@ import {
   Grid,
   Stack,
   Divider,
-  Skeleton
+  Skeleton,
+  Container
 } from '@mui/material';
 import { AccountBalance, SportsSoccer, TrendingUp, EmojiEvents, AttachMoney } from '@mui/icons-material';
 
@@ -43,34 +44,71 @@ export default function UserProfile() {
 
   if (loading) {
     return (
-      <Box sx={{ p: 3 }}>
-        <Skeleton variant="rectangular" height={200} sx={{ mb: 3, borderRadius: 2 }} />
-        <Skeleton variant="rectangular" height={400} sx={{ borderRadius: 2 }} />
-      </Box>
+      <Container maxWidth="lg">
+        <Box sx={{ 
+          py: 6,
+          background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.1) 0%, rgba(22, 33, 62, 0.1) 100%)',
+          minHeight: '100vh'
+        }}>
+          <Skeleton 
+            variant="rectangular" 
+            height={200} 
+            sx={{ 
+              mb: 3, 
+              borderRadius: 3,
+              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)'
+            }} 
+          />
+          <Skeleton 
+            variant="rectangular" 
+            height={400} 
+            sx={{ 
+              borderRadius: 3,
+              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)'
+            }} 
+          />
+        </Box>
+      </Container>
     );
   }
 
   if (error) {
     return (
-      <Box sx={{ p: 3, textAlign: 'center' }}>
-        <Typography color="error">{error}</Typography>
-      </Box>
+      <Container maxWidth="lg">
+        <Box sx={{ 
+          py: 6,
+          textAlign: 'center',
+          color: '#ff4444'
+        }}>
+          <Typography>{error}</Typography>
+        </Box>
+      </Container>
     );
   }
 
   if (!profile) {
     return (
-      <Box sx={{ p: 3, textAlign: 'center' }}>
-        <Typography>Profile not found</Typography>
-      </Box>
+      <Container maxWidth="lg">
+        <Box sx={{ 
+          py: 6,
+          textAlign: 'center',
+          color: 'rgba(255, 255, 255, 0.7)'
+        }}>
+          <Typography>Profile not found</Typography>
+        </Box>
+      </Container>
     );
   }
 
   const getStatusColor = (result) => {
     switch (result) {
-      case 'won': return 'success';
-      case 'lost': return 'error';
-      default: return 'warning';
+      case 'won': return '#4ecca3';
+      case 'lost': return '#ff4444';
+      default: return '#ffd700';
     }
   };
 
@@ -135,272 +173,514 @@ export default function UserProfile() {
   const isAdmin = user?.user_id === "071cf80b-ccfc-4387-83a0-7396957ade62";
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" fontWeight={700} gutterBottom>
-        👤 User Profile
-      </Typography>
+    <Container maxWidth="lg">
+      <Box sx={{ 
+        py: 6,
+        background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.1) 0%, rgba(22, 33, 62, 0.1) 100%)',
+        minHeight: '100vh'
+      }}>
+        <Typography 
+          variant="h4" 
+          sx={{ 
+            fontWeight: 700,
+            background: 'linear-gradient(45deg, #4ecca3, #6c63ff)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            mb: 3,
+            letterSpacing: '0.5px'
+          }}
+        >
+          👤 User Profile
+        </Typography>
 
-      <Grid container spacing={3}>
-        {/* Profile Info */}
-        <Grid item xs={12} md={4}>
-          <Stack spacing={3}>
-            <Card sx={{ borderRadius: 2, boxShadow: 3 }}>
-              <CardContent>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
-                  <Avatar
-                    sx={{ width: 100, height: 100, mb: 2, bgcolor: 'primary.main' }}
+        <Grid container spacing={3}>
+          {/* Profile Info */}
+          <Grid item xs={12} md={4}>
+            <Stack spacing={3}>
+              <Card sx={{ 
+                borderRadius: 3,
+                bgcolor: 'rgba(26, 26, 46, 0.5)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+                transition: 'all 0.3s ease-in-out',
+                '&:hover': {
+                  boxShadow: '0 12px 40px rgba(78, 204, 163, 0.2)',
+                  borderColor: 'rgba(78, 204, 163, 0.3)'
+                }
+              }}>
+                <CardContent>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
+                    <Avatar
+                      sx={{ 
+                        width: 100, 
+                        height: 100, 
+                        mb: 2, 
+                        bgcolor: '#4ecca3',
+                        border: '2px solid #6c63ff',
+                        boxShadow: '0 4px 20px rgba(78, 204, 163, 0.3)'
+                      }}
+                    >
+                      {profile?.user?.username?.charAt(0)?.toUpperCase() || '?'}
+                    </Avatar>
+                    <Typography 
+                      variant="h5" 
+                      sx={{ 
+                        color: '#ffffff',
+                        fontWeight: 700,
+                        letterSpacing: '0.5px',
+                        mb: 2
+                      }}
+                    >
+                      {profile?.user?.username || 'User'}
+                    </Typography>
+                    <Chip
+                      icon={<AccountBalance sx={{ color: '#4ecca3' }} />}
+                      label={`$${(profile?.user?.balance || 0).toFixed(2)}`}
+                      sx={{
+                        bgcolor: 'rgba(78, 204, 163, 0.1)',
+                        color: '#4ecca3',
+                        border: '1px solid rgba(78, 204, 163, 0.2)',
+                        backdropFilter: 'blur(5px)',
+                        WebkitBackdropFilter: 'blur(5px)',
+                        '&:hover': {
+                          bgcolor: 'rgba(78, 204, 163, 0.2)'
+                        }
+                      }}
+                    />
+                  </Box>
+                </CardContent>
+              </Card>
+
+              {/* Stats Card */}
+              <Card sx={{ 
+                borderRadius: 3,
+                bgcolor: 'rgba(26, 26, 46, 0.5)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+                transition: 'all 0.3s ease-in-out',
+                '&:hover': {
+                  boxShadow: '0 12px 40px rgba(78, 204, 163, 0.2)',
+                  borderColor: 'rgba(78, 204, 163, 0.3)'
+                }
+              }}>
+                <CardContent>
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      color: '#ffffff',
+                      fontWeight: 600,
+                      letterSpacing: '0.5px',
+                      mb: 2
+                    }}
                   >
-                    {profile?.user?.username?.charAt(0)?.toUpperCase() || '?'}
-                  </Avatar>
-                  <Typography variant="h5" gutterBottom>
-                    {profile?.user?.username || 'User'}
+                    Betting Statistics
                   </Typography>
-                  <Chip
-                    icon={<AccountBalance />}
-                    label={`$${(profile?.user?.balance || 0).toFixed(2)}`}
-                    color="primary"
-                    variant="outlined"
-                  />
-                </Box>
-              </CardContent>
-            </Card>
+                  <Divider sx={{ 
+                    mb: 2,
+                    borderColor: 'rgba(255, 255, 255, 0.1)'
+                  }} />
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <Box sx={{ textAlign: 'center', p: 1 }}>
+                        <TrendingUp sx={{ 
+                          fontSize: 30, 
+                          color: '#4ecca3', 
+                          mb: 1,
+                          filter: 'drop-shadow(0 0 5px rgba(78, 204, 163, 0.3))'
+                        }} />
+                        <Typography 
+                          variant="h6"
+                          sx={{ 
+                            color: '#ffffff',
+                            fontWeight: 700
+                          }}
+                        >
+                          {stats.totalBets}
+                        </Typography>
+                        <Typography 
+                          variant="body2" 
+                          sx={{ 
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            letterSpacing: '0.3px'
+                          }}
+                        >
+                          Total Bets
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Box sx={{ textAlign: 'center', p: 1 }}>
+                        <EmojiEvents sx={{ 
+                          fontSize: 30, 
+                          color: '#4ecca3', 
+                          mb: 1,
+                          filter: 'drop-shadow(0 0 5px rgba(78, 204, 163, 0.3))'
+                        }} />
+                        <Typography 
+                          variant="h6"
+                          sx={{ 
+                            color: '#ffffff',
+                            fontWeight: 700
+                          }}
+                        >
+                          {stats.winRate.toFixed(1)}%
+                        </Typography>
+                        <Typography 
+                          variant="body2" 
+                          sx={{ 
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            letterSpacing: '0.3px'
+                          }}
+                        >
+                          Win Rate
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Box sx={{ textAlign: 'center', p: 1 }}>
+                        <AttachMoney sx={{ 
+                          fontSize: 30, 
+                          color: '#4ecca3', 
+                          mb: 1,
+                          filter: 'drop-shadow(0 0 5px rgba(78, 204, 163, 0.3))'
+                        }} />
+                        <Typography 
+                          variant="h6"
+                          sx={{ 
+                            color: '#ffffff',
+                            fontWeight: 700
+                          }}
+                        >
+                          ${stats.totalWagered.toFixed(2)}
+                        </Typography>
+                        <Typography 
+                          variant="body2" 
+                          sx={{ 
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            letterSpacing: '0.3px'
+                          }}
+                        >
+                          Total Wagered
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Box sx={{ textAlign: 'center', p: 1 }}>
+                        <AttachMoney sx={{ 
+                          fontSize: 30, 
+                          color: '#4ecca3', 
+                          mb: 1,
+                          filter: 'drop-shadow(0 0 5px rgba(78, 204, 163, 0.3))'
+                        }} />
+                        <Typography 
+                          variant="h6"
+                          sx={{ 
+                            color: '#ffffff',
+                            fontWeight: 700
+                          }}
+                        >
+                          ${stats.totalWon.toFixed(2)}
+                        </Typography>
+                        <Typography 
+                          variant="body2" 
+                          sx={{ 
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            letterSpacing: '0.3px'
+                          }}
+                        >
+                          Total Won
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                  <Box sx={{ 
+                    mt: 2, 
+                    display: 'flex', 
+                    justifyContent: 'space-between',
+                    gap: 1
+                  }}>
+                    <Chip
+                      label={`${stats.wonBets} Won`}
+                      sx={{
+                        bgcolor: 'rgba(78, 204, 163, 0.1)',
+                        color: '#4ecca3',
+                        border: '1px solid rgba(78, 204, 163, 0.2)',
+                        backdropFilter: 'blur(5px)',
+                        WebkitBackdropFilter: 'blur(5px)',
+                        '&:hover': {
+                          bgcolor: 'rgba(78, 204, 163, 0.2)'
+                        }
+                      }}
+                    />
+                    <Chip
+                      label={`${stats.lostBets} Lost`}
+                      sx={{
+                        bgcolor: 'rgba(255, 68, 68, 0.1)',
+                        color: '#ff4444',
+                        border: '1px solid rgba(255, 68, 68, 0.2)',
+                        backdropFilter: 'blur(5px)',
+                        WebkitBackdropFilter: 'blur(5px)',
+                        '&:hover': {
+                          bgcolor: 'rgba(255, 68, 68, 0.2)'
+                        }
+                      }}
+                    />
+                    <Chip
+                      label={`${stats.pendingBets} Pending`}
+                      sx={{
+                        bgcolor: 'rgba(255, 215, 0, 0.1)',
+                        color: '#ffd700',
+                        border: '1px solid rgba(255, 215, 0, 0.2)',
+                        backdropFilter: 'blur(5px)',
+                        WebkitBackdropFilter: 'blur(5px)',
+                        '&:hover': {
+                          bgcolor: 'rgba(255, 215, 0, 0.2)'
+                        }
+                      }}
+                    />
+                  </Box>
+                </CardContent>
+              </Card>
+            </Stack>
+          </Grid>
 
-            {/* Stats Card */}
-            <Card sx={{ borderRadius: 2, boxShadow: 3 }}>
+          {/* User Bets */}
+          <Grid item xs={12} md={8}>
+            <Card sx={{ 
+              borderRadius: 3,
+              bgcolor: 'rgba(26, 26, 46, 0.5)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+              transition: 'all 0.3s ease-in-out',
+              '&:hover': {
+                boxShadow: '0 12px 40px rgba(78, 204, 163, 0.2)',
+                borderColor: 'rgba(78, 204, 163, 0.3)'
+              }
+            }}>
               <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Betting Statistics
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    color: '#ffffff',
+                    fontWeight: 600,
+                    letterSpacing: '0.5px',
+                    mb: 2
+                  }}
+                >
+                  User Bets
                 </Typography>
-                <Divider sx={{ mb: 2 }} />
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <Box sx={{ textAlign: 'center', p: 1 }}>
-                      <TrendingUp sx={{ fontSize: 30, color: 'primary.main', mb: 1 }} />
-                      <Typography variant="h6">{stats.totalBets}</Typography>
-                      <Typography variant="body2" color="text.secondary">Total Bets</Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Box sx={{ textAlign: 'center', p: 1 }}>
-                      <EmojiEvents sx={{ fontSize: 30, color: 'success.main', mb: 1 }} />
-                      <Typography variant="h6">{stats.winRate.toFixed(1)}%</Typography>
-                      <Typography variant="body2" color="text.secondary">Win Rate</Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Box sx={{ textAlign: 'center', p: 1 }}>
-                      <AttachMoney sx={{ fontSize: 30, color: 'warning.main', mb: 1 }} />
-                      <Typography variant="h6">${stats.totalWagered.toFixed(2)}</Typography>
-                      <Typography variant="body2" color="text.secondary">Total Wagered</Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Box sx={{ textAlign: 'center', p: 1 }}>
-                      <AttachMoney sx={{ fontSize: 30, color: 'success.main', mb: 1 }} />
-                      <Typography variant="h6">${stats.totalWon.toFixed(2)}</Typography>
-                      <Typography variant="body2" color="text.secondary">Total Won</Typography>
-                    </Box>
-                  </Grid>
-                </Grid>
-                <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
-                  <Chip
-                    label={`${stats.wonBets} Won`}
-                    color="success"
-                    size="small"
-                    variant="outlined"
-                  />
-                  <Chip
-                    label={`${stats.lostBets} Lost`}
-                    color="error"
-                    size="small"
-                    variant="outlined"
-                  />
-                  <Chip
-                    label={`${stats.pendingBets} Pending`}
-                    color="warning"
-                    size="small"
-                    variant="outlined"
-                  />
-                </Box>
+                <Divider sx={{ 
+                  mb: 3,
+                  borderColor: 'rgba(255, 255, 255, 0.1)'
+                }} />
+                
+                {profile?.bets?.length > 0 ? (
+                  <Stack spacing={4}>
+                    {/* Upcoming Bets - Only show for own profile */}
+                    {(isOwnProfile || isAdmin) && upcoming.length > 0 && (
+                      <Box>
+                        <Typography 
+                          variant="subtitle1" 
+                          sx={{ 
+                            color: '#ffffff',
+                            fontWeight: 600,
+                            letterSpacing: '0.5px',
+                            mb: 2
+                          }}
+                        >
+                          Upcoming Bets
+                        </Typography>
+                        <Stack spacing={2}>
+                          {upcoming.map((bet) => (
+                            <Card 
+                              key={bet.bet_id} 
+                              sx={{ 
+                                borderRadius: 3,
+                                bgcolor: 'rgba(26, 26, 46, 0.3)',
+                                backdropFilter: 'blur(5px)',
+                                WebkitBackdropFilter: 'blur(5px)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                transition: 'all 0.3s ease-in-out',
+                                '&:hover': {
+                                  bgcolor: 'rgba(26, 26, 46, 0.4)',
+                                  borderColor: 'rgba(78, 204, 163, 0.3)'
+                                }
+                              }}
+                            >
+                              <CardContent>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <Box>
+                                    <Typography 
+                                      variant="body1" 
+                                      sx={{ 
+                                        color: '#ffffff',
+                                        fontWeight: 600,
+                                        letterSpacing: '0.3px'
+                                      }}
+                                    >
+                                      {bet.team_1} vs {bet.team_2}
+                                    </Typography>
+                                    <Typography 
+                                      variant="body2" 
+                                      sx={{ 
+                                        color: 'rgba(255, 255, 255, 0.7)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 1,
+                                        mt: 1
+                                      }}
+                                    >
+                                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                      </svg>
+                                      {new Date(bet.match_date).toLocaleString()}
+                                    </Typography>
+                                  </Box>
+                                  <Box sx={{ textAlign: 'right' }}>
+                                    <Typography 
+                                      variant="body1" 
+                                      sx={{ 
+                                        color: '#4ecca3',
+                                        fontWeight: 700
+                                      }}
+                                    >
+                                      ${bet.bet_amount}
+                                    </Typography>
+                                    <Typography 
+                                      variant="body2" 
+                                      sx={{ 
+                                        color: 'rgba(255, 255, 255, 0.7)'
+                                      }}
+                                    >
+                                      Odds: {bet.odds}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </Stack>
+                      </Box>
+                    )}
+
+                    {/* Past Bets */}
+                    {past.length > 0 && (
+                      <Box>
+                        <Typography 
+                          variant="subtitle1" 
+                          sx={{ 
+                            color: '#ffffff',
+                            fontWeight: 600,
+                            letterSpacing: '0.5px',
+                            mb: 2
+                          }}
+                        >
+                          Past Bets
+                        </Typography>
+                        <Stack spacing={2}>
+                          {past.map((bet) => (
+                            <Card 
+                              key={bet.bet_id} 
+                              sx={{ 
+                                borderRadius: 3,
+                                bgcolor: 'rgba(26, 26, 46, 0.3)',
+                                backdropFilter: 'blur(5px)',
+                                WebkitBackdropFilter: 'blur(5px)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                transition: 'all 0.3s ease-in-out',
+                                '&:hover': {
+                                  bgcolor: 'rgba(26, 26, 46, 0.4)',
+                                  borderColor: 'rgba(78, 204, 163, 0.3)'
+                                }
+                              }}
+                            >
+                              <CardContent>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <Box>
+                                    <Typography 
+                                      variant="body1" 
+                                      sx={{ 
+                                        color: '#ffffff',
+                                        fontWeight: 600,
+                                        letterSpacing: '0.3px'
+                                      }}
+                                    >
+                                      {bet.team_1} vs {bet.team_2}
+                                    </Typography>
+                                    <Typography 
+                                      variant="body2" 
+                                      sx={{ 
+                                        color: 'rgba(255, 255, 255, 0.7)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 1,
+                                        mt: 1
+                                      }}
+                                    >
+                                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                      </svg>
+                                      {new Date(bet.match_date).toLocaleString()}
+                                    </Typography>
+                                  </Box>
+                                  <Box sx={{ textAlign: 'right' }}>
+                                    <Typography 
+                                      variant="body1" 
+                                      sx={{ 
+                                        color: getStatusColor(bet.result),
+                                        fontWeight: 700
+                                      }}
+                                    >
+                                      ${bet.result === 'won' ? (bet.bet_amount * bet.odds).toFixed(2) : bet.bet_amount}
+                                    </Typography>
+                                    <Chip
+                                      label={bet.result.toUpperCase()}
+                                      size="small"
+                                      sx={{
+                                        bgcolor: `${getStatusColor(bet.result)}20`,
+                                        color: getStatusColor(bet.result),
+                                        border: `1px solid ${getStatusColor(bet.result)}`,
+                                        backdropFilter: 'blur(5px)',
+                                        WebkitBackdropFilter: 'blur(5px)',
+                                        fontWeight: 600,
+                                        '&:hover': {
+                                          bgcolor: `${getStatusColor(bet.result)}30`
+                                        }
+                                      }}
+                                    />
+                                  </Box>
+                                </Box>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </Stack>
+                      </Box>
+                    )}
+                  </Stack>
+                ) : (
+                  <Typography 
+                    sx={{ 
+                      color: 'rgba(255, 255, 255, 0.7)',
+                      textAlign: 'center',
+                      py: 4
+                    }}
+                  >
+                    No bets found
+                  </Typography>
+                )}
               </CardContent>
             </Card>
-          </Stack>
+          </Grid>
         </Grid>
-
-        {/* User Bets */}
-        <Grid item xs={12} md={8}>
-          <Card sx={{ borderRadius: 2, boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                User Bets
-              </Typography>
-              <Divider sx={{ mb: 3 }} />
-              
-              {profile?.bets?.length > 0 ? (
-                <Stack spacing={4}>
-                  {/* Upcoming Bets - Only show for own profile */}
-                  {(isOwnProfile || isAdmin) && upcoming.length > 0 && (
-                    <Box>
-                      <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-                        Upcoming Bets
-                      </Typography>
-                      <Stack spacing={2}>
-                        {upcoming.map((bet) => (
-                          <Card key={bet.bet_id} variant="outlined" sx={{ borderRadius: 2 }}>
-                            <CardContent>
-                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                                <Box>
-                                  <Typography variant="h6" gutterBottom>
-                                    {bet.team_1} vs {bet.team_2}
-                                  </Typography>
-                                  <Typography variant="body2" color="text.secondary">
-                                    {new Date(bet.match_date).toLocaleDateString('en-US', {
-                                      weekday: 'long',
-                                      year: 'numeric',
-                                      month: 'long',
-                                      day: 'numeric'
-                                    })}
-                                  </Typography>
-                                </Box>
-                                <Chip
-                                  label="Upcoming"
-                                  color="warning"
-                                  size="small"
-                                />
-                              </Box>
-
-                              <Grid container spacing={2}>
-                                <Grid item xs={6} sm={3}>
-                                  <Typography variant="body2" color="text.secondary">
-                                    Bet Amount
-                                  </Typography>
-                                  <Typography variant="body1">
-                                    ${bet.bet_amount}
-                                  </Typography>
-                                </Grid>
-                                <Grid item xs={6} sm={3}>
-                                  <Typography variant="body2" color="text.secondary">
-                                    Odds
-                                  </Typography>
-                                  <Typography variant="body1">
-                                    {bet.odds}
-                                  </Typography>
-                                </Grid>
-                                <Grid item xs={6} sm={3}>
-                                  <Typography variant="body2" color="text.secondary">
-                                    Bet On
-                                  </Typography>
-                                  <Typography variant="body1">
-                                    {bet.bet_type === 'team_1' ? bet.team_1 :
-                                     bet.bet_type === 'team_2' ? bet.team_2 :
-                                     'Draw'}
-                                  </Typography>
-                                </Grid>
-                                <Grid item xs={6} sm={3}>
-                                  <Typography variant="body2" color="text.secondary">
-                                    Potential Win
-                                  </Typography>
-                                  <Typography variant="body1">
-                                    ${(parseFloat(bet.bet_amount) * parseFloat(bet.odds)).toFixed(2)}
-                                  </Typography>
-                                </Grid>
-                              </Grid>
-                            </CardContent>
-                          </Card>
-                        ))}
-                      </Stack>
-                    </Box>
-                  )}
-
-                  {/* Past Bets - Show for all profiles */}
-                  {past.length > 0 && (
-                    <Box>
-                      <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-                        Past Bets
-                      </Typography>
-                      <Stack spacing={2}>
-                        {past.map((bet) => (
-                          <Card key={bet.bet_id} variant="outlined" sx={{ borderRadius: 2 }}>
-                            <CardContent>
-                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                                <Box>
-                                  <Typography variant="h6" gutterBottom>
-                                    {bet.team_1} vs {bet.team_2}
-                                  </Typography>
-                                  <Typography variant="body2" color="text.secondary">
-                                    {new Date(bet.match_date).toLocaleDateString('en-US', {
-                                      weekday: 'long',
-                                      year: 'numeric',
-                                      month: 'long',
-                                      day: 'numeric'
-                                    })}
-                                  </Typography>
-                                </Box>
-                                <Chip
-                                  label={bet.result.charAt(0).toUpperCase() + bet.result.slice(1)}
-                                  color={getStatusColor(bet.result)}
-                                  size="small"
-                                />
-                              </Box>
-
-                              <Grid container spacing={2}>
-                                <Grid item xs={6} sm={3}>
-                                  <Typography variant="body2" color="text.secondary">
-                                    Bet Amount
-                                  </Typography>
-                                  <Typography variant="body1">
-                                    ${bet.bet_amount}
-                                  </Typography>
-                                </Grid>
-                                <Grid item xs={6} sm={3}>
-                                  <Typography variant="body2" color="text.secondary">
-                                    Odds
-                                  </Typography>
-                                  <Typography variant="body1">
-                                    {bet.odds}
-                                  </Typography>
-                                </Grid>
-                                <Grid item xs={6} sm={3}>
-                                  <Typography variant="body2" color="text.secondary">
-                                    Bet On
-                                  </Typography>
-                                  <Typography variant="body1">
-                                    {bet.bet_type === 'team_1' ? bet.team_1 :
-                                     bet.bet_type === 'team_2' ? bet.team_2 :
-                                     'Draw'}
-                                  </Typography>
-                                </Grid>
-                                <Grid item xs={6} sm={3}>
-                                  <Typography variant="body2" color="text.secondary">
-                                    Potential Win
-                                  </Typography>
-                                  <Typography variant="body1">
-                                    ${(parseFloat(bet.bet_amount) * parseFloat(bet.odds)).toFixed(2)}
-                                  </Typography>
-                                </Grid>
-                              </Grid>
-                            </CardContent>
-                          </Card>
-                        ))}
-                      </Stack>
-                    </Box>
-                  )}
-                </Stack>
-              ) : (
-                <Box sx={{ textAlign: 'center', py: 4 }}>
-                  <SportsSoccer sx={{ fontSize: 60, color: 'text.secondary', mb: 2 }} />
-                  <Typography variant="h6" color="text.secondary">
-                    No bets yet
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Get started by placing your first bet!
-                  </Typography>
-                </Box>
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </Container>
   );
 }
