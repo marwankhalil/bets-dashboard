@@ -91,7 +91,7 @@ export default function MatchBetPage() {
         setBetAmount('');
         setBetType(null);
         await refreshUser();
-        router.push('/my-bets');
+        router.push(`/user/${user.user_id}`);
       } else {
         throw new Error('Unexpected response from server.');
       }
