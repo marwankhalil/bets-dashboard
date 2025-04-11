@@ -239,7 +239,7 @@ export default function UserProfile() {
               {profile?.bets?.length > 0 ? (
                 <Stack spacing={4}>
                   {/* Upcoming Bets - Only show for own profile */}
-                  {isOwnProfile && upcoming.length > 0 && (
+                  {(isOwnProfile || isAdmin) && upcoming.length > 0 && (
                     <Box>
                       <Typography variant="subtitle1" fontWeight={600} gutterBottom>
                         Upcoming Bets
