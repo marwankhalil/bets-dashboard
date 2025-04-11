@@ -132,6 +132,7 @@ export default function UserProfile() {
 
   const { upcoming, past } = separateBets(profile?.bets);
   const isOwnProfile = user?.user_id === userId;
+  const isAdmin = user?.user_id === "071cf80b-ccfc-4387-83a0-7396957ade62";
 
   return (
     <Box sx={{ p: 3 }}>
