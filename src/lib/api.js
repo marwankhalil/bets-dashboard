@@ -54,3 +54,8 @@ export async function fetchLeaderboard() {
   const res = await fetch(`${BASE_URL}/users/leaderboard`);
   return await res.json();
 }
+
+export async function fetchUserProfile(user_id) {
+  const res = await fetch(`${BASE_URL}/users/${user_id}/profile`);
+  return await res.json();
+}

@@ -14,6 +14,7 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material';
+import Link from 'next/link';
 import { fetchLeaderboard } from '../lib/api';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { useAuth } from '../context/AuthContext';
@@ -105,48 +106,67 @@ export default function LeaderboardPage() {
                       key={userData.user_id}
                       sx={{ 
                         '&:last-child td, &:last-child th': { border: 0 },
-                        bgcolor: userData.user_id === user?.user_id ? 'rgba(0, 188, 212, 0.1)' : 'inherit'
+                        bgcolor: userData.user_id === user?.user_id ? 'rgba(0, 188, 212, 0.1)' : 'inherit',
+                        cursor: 'pointer',
+                        '&:hover': {
+                          bgcolor: 'action.hover'
+                        }
                       }}
                     >
                       <TableCell component="th" scope="row">
-                        <Typography 
-                          variant="h6" 
-                          sx={{ 
-                            color: index === 0 ? '#FFD700' : 
-                                  index === 1 ? '#C0C0C0' : 
-                                  index === 2 ? '#CD7F32' : 'inherit',
-                            fontWeight: index < 3 ? 700 : 400
-                          }}
+                        <Link 
+                          href={`/user/${userData.user_id}`}
+                          style={{ textDecoration: 'none', color: 'inherit' }}
                         >
-                          #{index + 1}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                          <Avatar
+                          <Typography 
+                            variant="h6" 
                             sx={{ 
-                              bgcolor: 'primary.main',
-                              width: 32,
-                              height: 32
+                              color: index === 0 ? '#FFD700' : 
+                                    index === 1 ? '#C0C0C0' : 
+                                    index === 2 ? '#CD7F32' : 'inherit',
+                              fontWeight: index < 3 ? 700 : 400
                             }}
                           >
-                            {userData.username[0].toUpperCase()}
-                          </Avatar>
-                          <Typography variant="body1">
-                            {userData.username}
+                            #{index + 1}
                           </Typography>
-                        </Box>
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        <Link 
+                          href={`/user/${userData.user_id}`}
+                          style={{ textDecoration: 'none', color: 'inherit' }}
+                        >
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <Avatar
+                              sx={{ 
+                                bgcolor: 'primary.main',
+                                width: 32,
+                                height: 32
+                              }}
+                            >
+                              {userData.username[0].toUpperCase()}
+                            </Avatar>
+                            <Typography variant="body1">
+                              {userData.username}
+                            </Typography>
+                          </Box>
+                        </Link>
                       </TableCell>
                       <TableCell align="right">
-                        <Typography 
-                          variant="body1" 
-                          sx={{ 
-                            fontWeight: 600,
-                            color: 'primary.main'
-                          }}
+                        <Link 
+                          href={`/user/${userData.user_id}`}
+                          style={{ textDecoration: 'none', color: 'inherit' }}
                         >
-                          ${Number(userData.balance).toFixed(2)}
-                        </Typography>
+                          <Typography 
+                            variant="body1" 
+                            sx={{ 
+                              fontWeight: 600,
+                              color: 'primary.main'
+                            }}
+                          >
+                            ${Number(userData.balance).toFixed(2)}
+                          </Typography>
+                        </Link>
                       </TableCell>
                     </TableRow>
                   ))}

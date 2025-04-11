@@ -92,19 +92,19 @@ export default function TopToolbar() {
     >
       {user && (
         <>
-          <MenuItem sx={{ p: 0 }}>
+          <MenuItem sx={{ p: 0 }} onClick={handleMenuClose}>
             {navLink('/matches', 'MATCHES')}
           </MenuItem>
-          <MenuItem sx={{ p: 0 }}>
-            {navLink('/my-bets', 'MY BETS')}
+          <MenuItem sx={{ p: 0 }} onClick={handleMenuClose}>
+            {navLink(`/user/${user.user_id}`, 'MY PROFILE')}
           </MenuItem>
-          <MenuItem sx={{ p: 0 }}>
+          <MenuItem sx={{ p: 0 }} onClick={handleMenuClose}>
             {navLink('/leaderboard', 'LEADERBOARD')}
           </MenuItem>
         </>
       )}
       {!user && (
-        <MenuItem sx={{ p: 0 }}>
+        <MenuItem sx={{ p: 0 }} onClick={handleMenuClose}>
           <Button
             color="inherit"
             onClick={() => {
@@ -212,7 +212,7 @@ export default function TopToolbar() {
               {user && (
                 <>
                   {navLink('/matches', 'MATCHES')}
-                  {navLink('/my-bets', 'MY BETS')}
+                  {navLink(`/user/${user.user_id}`, 'MY PROFILE')}
                   {navLink('/leaderboard', 'LEADERBOARD')}
                 </>
               )}
