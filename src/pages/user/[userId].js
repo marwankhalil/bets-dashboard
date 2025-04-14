@@ -75,21 +75,13 @@ export default function UserProfile() {
   };
 
   const formatBetType = (bet) => {
-    if (bet.advanced_bet_type) {
-      // New system bet
-      if (bet.advanced_bet_type === 'team_to_win') {
-        const team = bet.bet_parameters?.team;
-        if (team === 'team_1') return bet.team_1;
-        if (team === 'team_2') return bet.team_2;
-        return 'Draw';
-      }
-      return bet.advanced_bet_type;
-    } else {
-      // Old system bet
-      if (bet.bet_type === 'team_1') return bet.team_1;
-      if (bet.bet_type === 'team_2') return bet.team_2;
+    if (bet.advanced_bet_type === 'team_to_win') {
+      const team = bet.bet_parameters?.team;
+      if (team === 'team_1') return bet.team_1;
+      if (team === 'team_2') return bet.team_2;
       return 'Draw';
     }
+    return bet.advanced_bet_type;
   };
 
   const calculateStats = (bets) => {
