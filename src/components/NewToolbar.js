@@ -158,7 +158,7 @@ export default function TopToolbar() {
                     fontSize: { xs: '1.1rem', sm: '1.25rem' }
                   }}
                 >
-                  BetZone
+                  FantasyBets
                 </Typography>
               </Box>
             </a>

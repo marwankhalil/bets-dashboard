@@ -67,7 +67,7 @@ export default function Username({ onSubmit }) {
                         </Typography>
                     </Box>
                     <Typography variant="body2" color="#cccccc">
-                        This will be your display name in BetZone
+                        This will be your display name in FantasyBets
                     </Typography>
 
                     <form onSubmit={handleSubmit}>

@@ -64,7 +64,7 @@ export default function Login() {
             >
                 <Stack spacing={3}>
                     <Typography variant="h4" fontWeight={700}>
-                        Welcome to <span style={{ color: '#00bcd4' }}>BetZone</span>
+                        Welcome to <span style={{ color: '#00bcd4' }}>FantasyBets</span>
                     </Typography>
                     <Typography variant="body2" color="#cccccc">
                         Dive into the game and compete with your friends.
