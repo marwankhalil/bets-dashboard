@@ -74,6 +74,24 @@ export default function UserProfile() {
     }
   };
 
+  const formatBetType = (bet) => {
+    if (bet.advanced_bet_type) {
+      // New system bet
+      if (bet.advanced_bet_type === 'team_to_win') {
+        const team = bet.bet_parameters?.team;
+        if (team === 'team_1') return bet.team_1;
+        if (team === 'team_2') return bet.team_2;
+        return 'Draw';
+      }
+      return bet.advanced_bet_type;
+    } else {
+      // Old system bet
+      if (bet.bet_type === 'team_1') return bet.team_1;
+      if (bet.bet_type === 'team_2') return bet.team_2;
+      return 'Draw';
+    }
+  };
+
   const calculateStats = (bets) => {
     if (!bets || bets.length === 0) return {
       totalBets: 0,
@@ -291,9 +309,7 @@ export default function UserProfile() {
                                     Bet On
                                   </Typography>
                                   <Typography variant="body1">
-                                    {bet.bet_type === 'team_1' ? bet.team_1 :
-                                     bet.bet_type === 'team_2' ? bet.team_2 :
-                                     'Draw'}
+                                    {formatBetType(bet)}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={6} sm={3}>
@@ -365,9 +381,7 @@ export default function UserProfile() {
                                     Bet On
                                   </Typography>
                                   <Typography variant="body1">
-                                    {bet.bet_type === 'team_1' ? bet.team_1 :
-                                     bet.bet_type === 'team_2' ? bet.team_2 :
-                                     'Draw'}
+                                    {formatBetType(bet)}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={6} sm={3}>

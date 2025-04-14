@@ -81,7 +81,10 @@ export default function MatchBetPage() {
       const response = await placeBet({
         user_id: user.user_id,
         match_id: id,
-        bet_type: betType,
+        advanced_bet_type: 'team_to_win',
+        bet_parameters: {
+          team: betType === 'draw' ? 'draw' : betType
+        },
         bet_amount: Number(betAmount),
         odds: parseFloat(odds[betType])
       });

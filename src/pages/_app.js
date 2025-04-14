@@ -1,4 +1,4 @@
-import TopToolbar from '../components/toolbar';
+import TopToolbar from '../components/NewToolbar';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import '../styles/globals.css';
 import Layout from '../components/Layout';
